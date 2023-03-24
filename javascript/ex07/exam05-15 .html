@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ex07</title>
+<style>
+    .dd {
+        border: 1px solid red;
+    }
+</style>
+</head>
+<body>
+<h1>jQuery 만들기 - 14. ajax post</h1>
+<form id="login-form">
+이메일: <input type="email" name="email" ><br>
+암호: <input type="password" name="password"><br>
+<button>로그인</button>
+<button type="reset">취소</button>
+</form>
+
+<script src="jquery-15.js"></script>
+
+<script>
+
+</script>
+
+<script>
+"use strict"
+
+var tbody = $("tbody");
+
+$("#login-form").submit((e) => {
+   
+    
+});
+    $.ajax({
+        url: "http://localhost:3000/login",
+        method: "post",
+        dataType : "text",
+        data: {
+            email : $("#login-form > input[name='email']").val(),
+            password : $("#login-form > input[name='password']").val()
+        },
+        success : function() {}
+      });
+
+ 
+    
+
+    xhr.open(settings.method, settings.url, setting.async);
+
+      if(settings.method =="POST"){
+        xhr.setRequestHeader(
+        "Content-Type", 
+        "application/x-www-form-urlencoded");
+        
+        let payload = "";
+
+        if (settings.data != underfined && settings.data != null) {
+            for (let key in settings.data) {
+                if (payload.lenght > 0) {
+                    payload += "&";
+                }
+                payload += key + "=" + settings.data[key];
+            }
+        }
+        xhr.send(payload);
+      }else{
+        xhr.send();
+    }
+  
+
+//따로 ajax 요청을 할 것이기 때문에,
+//웹브라우저가 서버에 요청하는 것은 막는다.
+
+e.preventDefauslt()
+
+</script>
+</body>
+</html>
+
+
+
+
+

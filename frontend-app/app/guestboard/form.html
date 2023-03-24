@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<h1>새 자유게시글 작성</h1>
+<form>
+<table border="1">
+  <tbody>
+    <tr>
+      <th>제목</th>
+      <td><input type="text" name="title" id="f-title"></td>
+    </tr>
+    
+      <th>내용</th>
+      <td><textarea name="content" rows="10" cols="50" id="f-content"></textarea></td>
+ 
+    <tr>
+        <td>
+        <select name="weather" id ="f-weather">
+        <option value="0">날씨</option>
+        <option value="1">🌞</option>
+        <option value="2">☔❄</option>
+        <option value="3">⛅</option>
+        <option value="4">❄</option>
+        </option>
+      </td>
+       <td>
+        <select name="emotion" id ="f-emotion">
+        <option value="0">감정</option>
+        <option value="1">😀</option>
+        <option value="2">🤢</option>
+        <option value="3">🥰</option>
+        <option value="4">🤩</option>
+        <option value="5">🙃</option>
+        <option value="6">😡</option>
+        </option>
+        <input type = "radio" name="late" value = "true" id ="f-late">지각자
+        <input type = "radio" name="late" value = "false" checked> 안지각자
+        <input type = "checkbox" name="check" value = "true" id ="f-check">술땡기면 일단 눌러!
+      </td>
+    </tr>
+  </tbody>
+</table>
+<button id="add-btn" type="button">등록</button>
+<button id="cancel-btn" type="button">취소</button>
+</form>
+
+<script>
+document.querySelector('#add-btn').onclick = (e) => {
+  var title = encodeURIComponent(document.querySelector('#f-title').value);
+  var content = encodeURIComponent(document.querySelector('#f-content').value);
+  var weather = document.querySelector('#f-weather').value;
+  var emotion = document.querySelector('#f-emotion').value;
+  var late = document.querySelector('#f-late').checked ? 'w' : 'm';
+  var check = document.querySelector('#f-check').checked;
+  
+  console.log(`title=${title}&content=${content}&weather=${weather}&emotion=${emotion}&late=${late}`
+   + `&check=${check}`);
+
+  fetch('http://localhost:8080/guestboards', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/x-www-form-urlencoded'
+    },
+    body:(`title=${title}&content=${content}&weather=${weather}&emotion=${emotion}&late=${late}`
+   + `&check=${check}`)
+  })
+  .then((response) => {return response.json();})
+  .then((obj) => {
+    location.href = "list.html";
+  })
+  .catch((err) => {
+    alert("서버 요청 오류!");
+    console.log(err);
+  });
+};
+
+document.querySelector('#cancel-btn').onclick = (e) => {
+  location.href = "list.html";
+};
+
+</script>
+</body>
+</html>

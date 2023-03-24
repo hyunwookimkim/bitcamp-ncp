@@ -1,0 +1,2 @@
+rootProject.name = 'backend-app'
+include('app')// 해당 폴더의 하위폴더로 지정해라 
