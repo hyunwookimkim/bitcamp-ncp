@@ -42,6 +42,10 @@ public class DefaultStudentService implements StudentService {
 
     return studentDao.findByEmailAndPassword(paramMap);
   }
+  @Override
+  public Student get(String email) {
+    return studentDao.findByEmail(email);
+  }
 
   @Transactional
   @Override

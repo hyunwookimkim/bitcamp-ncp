@@ -1,15 +1,19 @@
 package bitcamp.myapp.controller;
 
+import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import bitcamp.myapp.service.StudentService;
 import bitcamp.myapp.service.TeacherService;
 import bitcamp.myapp.vo.Member;
+import bitcamp.myapp.vo.Student;
 import bitcamp.util.RestResult;
 import bitcamp.util.RestStatus;
 import jakarta.servlet.http.HttpSession;
@@ -73,8 +77,51 @@ public class AuthController {
           .setStatus(RestStatus.FAILURE);
     }
   }
+  @PostMapping("facebookLogin")
+  public Object facebookLogin(
+      @RequestBody Map<String,String> jsonData,
+      HttpSession session) throws Exception {
+
+    RestTemplate restTemplate = new RestTemplate();
+    @SuppressWarnings("rawtypes")
+    Map result = restTemplate.getForObject(
+        "https://graph.facebook.com/v16.0/me?access_token={value1}&fields={value2}", // 요청할 URL
+        Map.class, // 서버에서 받은 결과의 타입
+        jsonData.get("accessToken"), // URL의 첫 번째 자리에 들어갈 값
+        "id,name,email,gender" // 페이스북 측에 요청하는 로그인 사용자 정보
+        );
+    //기존 회원정보 가져오기
+    //    ObjectMapper objectMapper = new ObjectMapper();
+    //    @SuppressWarnings("unchecked")
+    //    Map<String,String> data = objectMapper.readValue(result, Map.class);
+    String email = (String)result.get("email");
+    String name = (String) result.get("name");
+
+    Student user = studentService.get(email);
+    if(user == null) {
+      //페이스북에서 받은 최소정보를 가지고 회원가입을 위한 객체를 준비한다,.
+      Student s = new Student();
+      s.setEmail(email);
+      s.setName(name);
+      s.setPassword("bitcamp-nopassword");
+
+      //회원가입을 수행
+      studentService.add(s);
+    }
+
+    user = studentService.get(email);
+
+    log.debug(user);
+    session.setAttribute("loginUser", user);
+
+    return new RestResult()
+        .setStatus(RestStatus.SUCCESS)
+        .setData(result);
+  }
 
 }
+
+
 
 
 

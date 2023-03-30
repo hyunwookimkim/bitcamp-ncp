@@ -10,12 +10,12 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import bitcamp.myapp.web.interceptor.AdminCheckInterceptor;
 import bitcamp.myapp.web.interceptor.AuthInterceptor;
-
 @EnableTransactionManagement
 @SpringBootApplication
 public class App implements WebMvcConfigurer {
 
   Logger log = LogManager.getLogger(getClass());
+
 
   public static void main(String[] args) {
     SpringApplication.run(App.class, args);
